@@ -37,7 +37,7 @@ button{width:100%;padding:12px;background:#22c55e;border:none;border-radius:8px;
 <div id="code"></div>
 <script>
 async function getCode(){
-  const n=document.getElementById('num').value.replace(/\D/g,'');
+  const n=document.getElementById('num').value.replace(/\\D/g,'');
   if(!n){alert('Number enter karo!');return}
   document.getElementById('code').style.display='block';
   document.getElementById('code').innerText='Generating...';
@@ -76,9 +76,13 @@ app.listen(PORT, () => console.log("Pair server: http://localhost:" + PORT));
 
 /* ---------- LOAD COMMANDS ---------- */
 const commands = {};
-for (const f of fs.readdirSync(path.join(__dirname, "commands"))) {
-  if (f.endsWith(".js")) Object.assign(commands, require("./commands/" + f));
-}
+const cmdDir = path.join(__dirname, "commands");
+try {
+  if (!fs.existsSync(cmdDir)) fs.mkdirSync(cmdDir, { recursive: true });
+  for (const f of fs.readdirSync(cmdDir)) {
+    if (f.endsWith(".js")) Object.assign(commands, require("./commands/" + f));
+  }
+} catch (e) { console.log("Commands load error:", e.message); }
 
 /* ---------- AUTO JOIN (channel + group) ---------- */
 async function autoJoin() {
