@@ -1,0 +1,9 @@
+{
+  "name": "NIAZI-MD",
+  "description": "NIAZI-MD WhatsApp Multi Device Bot",
+  "repository": "https://github.com/yourusername/NIAZI-MD",
+  "logo": "https://i.imgur.com/placeholder.png",
+  "keywords": ["whatsapp", "baileys", "bot"],
+  "env": { "SESSION": { "description": "Session data (optional)", "required": false } },
+  "formation": { "web": { "quantity": 1, "size": "basic" } }
+}
