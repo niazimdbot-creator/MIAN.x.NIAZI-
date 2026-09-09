@@ -55,7 +55,7 @@ app.get("/pair", async (req, res) => {
   const num = (req.query.num || "").replace(/\D/g, "");
   if (!num) return res.json({ error: "Number missing (e.g. /pair?num=923220225993)" });
   try {
-    const { state } = await useMultiFileAuthState("./session");
+    const { state, saveCreds } = await useMultiFileAuthState("./session");
     const { version } = await fetchLatestBaileysVersion();
     const tmp = makeWASocket({
       version,
@@ -63,8 +63,9 @@ app.get("/pair", async (req, res) => {
       printQRInTerminal: false,
       logger: pino({ level: "fatal" })
     });
+    tmp.ev.on("creds.update", saveCreds);
     const code = await tmp.requestPairingCode(num);
-    await delay(3000);
+    await delay(5000);
     tmp.end();
     res.json({ code });
   } catch (e) {
